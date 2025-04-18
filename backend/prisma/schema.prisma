@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  MANAGER
+  KITCHEN
+  CUSTOMER
+  DELIVERY
+}
+
+enum UserStatus {
+  ACTIVE
+  PENDING_VERIFICATION
+  SUSPENDED
+}
+
+model User {
+  id       String     @id @default(uuid()) @db.Uuid
+  email    String?    @unique @db.VarChar(255)
+  phone    String?    @unique @db.VarChar(20)
+  name     String     @db.VarChar(100)
+  password String     @db.VarChar(255)
+  role     UserRole   @default(CUSTOMER)
+  status   UserStatus @default(PENDING_VERIFICATION)
+
+  // Authentication fields
+  otp          String?   @db.VarChar(6)
+  otpExpiresAt DateTime?
+  lastLoginAt  DateTime?
+
+  // Security
+  failedLoginAttempts Int       @default(0)
+  accountLockedUntil  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([phone])
+  @@index([status])
+  @@index([role])
+}
+
+// Optional: Basic restaurant model without relations
+model Restaurant {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @db.VarChar(100)
+  status    String   @default("ACTIVE")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
