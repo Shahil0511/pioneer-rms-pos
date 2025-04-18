@@ -1,61 +1,66 @@
 # ========================
 # Node.js / Express (Backend)
 # ========================
-node_modules/
-dist/
-build/
-.env*
-!.env.example
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
+node_modules/               # Exclude node_modules folder
+dist/                        # Exclude build artifacts
+build/                       # Exclude build folder
+.env                         # Exclude all .env files (important for security)
+.env.*                       # Exclude .env.* files (like .env.local, .env.production)
+!.env.example                # Allow .env.example to provide environment variables example
+npm-debug.log*               # Exclude npm debug log files
+yarn-debug.log*              # Exclude yarn debug log files
+yarn-error.log*              # Exclude yarn error log files
+pnpm-debug.log*              # Exclude pnpm debug log files
 
 # ========================
 # React / Next.js (Frontend)
 # ========================
-/.next/
-out/
-.vercel/
-exported/
-*.tsbuildinfo
+.next/                       # Exclude Next.js build artifacts
+out/                         # Exclude static export folder
+.vercel/                     # Exclude Vercel deployment folder
+exported/                    # Exclude exported folder
+*.tsbuildinfo                # Exclude TypeScript build info files
 
 # ========================
 # Logs
 # ========================
-logs
-*.log
+logs/                        # Exclude log files
+*.log                        # Exclude log files with any extension
 
 # ========================
 # OS-specific files
 # ========================
-.DS_Store
-Thumbs.db
+.DS_Store                    # Exclude macOS Finder metadata files
+Thumbs.db                    # Exclude Windows thumbnail cache files
 
 # ========================
 # IDEs and editors
 # ========================
-.vscode/
-.idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
+.vscode/                     # Exclude VS Code settings folder
+.idea/                       # Exclude JetBrains IDE settings folder
+*.suo                        # Exclude Visual Studio user options files
+*.ntvs*                      # Exclude Visual Studio Code project files
+*.njsproj                    # Exclude Visual Studio project files
+*.sln                        # Exclude Visual Studio solution files
 
 # ========================
 # Coverage reports
 # ========================
-coverage/
-*.lcov
+coverage/                    # Exclude code coverage reports
+*.lcov                       # Exclude lcov files (coverage reports)
 
 # ========================
 # MongoDB dump (optional)
 # ========================
-dump/
+dump/                        # Exclude MongoDB dump files
 
 # ========================
 # Misc
 # ========================
-*.tgz
-*.zip
-*.bak
+*.tgz                        # Exclude tarballs
+*.zip                        # Exclude zip files
+*.bak                        # Exclude backup files
+# Prisma generated files
+prisma/client/
+node_modules/.prisma/
+.DS_Store
