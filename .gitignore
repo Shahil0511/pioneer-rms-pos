@@ -64,3 +64,10 @@ dump/                        # Exclude MongoDB dump files
 prisma/client/
 node_modules/.prisma/
 .DS_Store
+
+# Ignore Prisma generated files
+backend/prisma/migrations/
+backend/src/generated/prisma/
+backend/prisma/schema.prisma
+backend/src/lib/prisma.ts
+
