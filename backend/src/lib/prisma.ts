@@ -1,20 +1,13 @@
-import { PrismaClient } from "../generated/prisma";
-import dotenv from "dotenv";
+import { PrismaClient } from "@prisma/client";
 
-// Load environment variables
-dotenv.config();
-
-// Type definitions for global scope
+// Declare global PrismaClient for development hot-reloading
 declare global {
   // eslint-disable-next-line no-var
   var prisma: PrismaClient | undefined;
 }
 
-/**
- * Creates and configures a new PrismaClient instance
- */
+// Create new Prisma client with middleware and logging
 function createPrismaClient(): PrismaClient {
-  // Create new client with appropriate logging based on environment
   const client = new PrismaClient({
     log:
       process.env.NODE_ENV === "development"
@@ -22,114 +15,71 @@ function createPrismaClient(): PrismaClient {
         : ["error"],
   });
 
-  // Configure soft delete middleware
-  client.$use(async (params, next) => {
-    if (params.model === "User") {
-      // Handle delete operations as soft deletes
-      if (params.action === "delete") {
-        // Convert to update with deletedAt timestamp
-        params.action = "update";
-        params.args.data = { deletedAt: new Date() };
-      }
+  // Soft delete middleware for User model
+  client.$use(
+    async (
+      params: { model?: any; action: any; args?: any },
+      next: (arg0: any) => any
+    ) => {
+      if (params.model === "User") {
+        const { action, args } = params;
 
-      // Handle bulk delete operations as soft deletes
-      if (params.action === "deleteMany") {
-        // Convert to updateMany with deletedAt timestamp
-        params.action = "updateMany";
-        if (!params.args.data) params.args.data = {};
-        params.args.data.deletedAt = new Date();
-      }
-
-      // Filter out soft-deleted records from queries
-      if (["findUnique", "findFirst", "findMany"].includes(params.action)) {
-        // For findUnique, convert to findFirst to allow additional filters
-        if (params.action === "findUnique") {
-          params.action = "findFirst";
+        if (action === "delete") {
+          params.action = "update";
+          args.data = { deletedAt: new Date() };
         }
 
-        // Add filter for non-deleted records
-        if (!params.args.where) params.args.where = {};
-        if (params.args.where.deletedAt === undefined) {
-          params.args.where.deletedAt = null;
+        if (action === "deleteMany") {
+          params.action = "updateMany";
+          args.data ??= {};
+          args.data.deletedAt = new Date();
+        }
+
+        if (["findUnique", "findFirst", "findMany"].includes(action)) {
+          if (action === "findUnique") params.action = "findFirst";
+          args.where ??= {};
+          if (args.where.deletedAt === undefined) {
+            args.where.deletedAt = null;
+          }
         }
       }
+
+      return next(params);
     }
-    return next(params);
-  });
+  );
 
   return client;
 }
 
-/**
- * Get or create a PrismaClient instance based on environment
- */
-export function getPrismaClient(): PrismaClient {
-  // For production, create a new client per request to avoid connection issues
-  if (process.env.NODE_ENV === "production") {
-    return createPrismaClient();
-  }
+// Export db instance — singleton in development, new instance in production
+export const db =
+  process.env.NODE_ENV === "production"
+    ? createPrismaClient()
+    : global.prisma ?? (global.prisma = createPrismaClient());
 
-  // For development, use singleton pattern to improve performance
-  if (!global.prisma) {
-    global.prisma = createPrismaClient();
-    console.log("New PrismaClient instance created");
-  }
-
-  return global.prisma;
-}
-
-// Export database client instance
-export const db = getPrismaClient();
-
-// Set up cleanup for development environment
+// Graceful shutdown handlers (only in development)
 if (process.env.NODE_ENV !== "production") {
-  // These handlers will only be registered once
-
-  // Handle graceful shutdown on SIGINT (Ctrl+C)
   process.once("SIGINT", async () => {
-    console.log("SIGINT received, shutting down gracefully");
-    try {
-      await db.$disconnect();
-      console.log("Database connections closed");
-    } catch (e) {
-      console.error("Error during database disconnection:", e);
-    }
+    console.log("SIGINT received, shutting down...");
+    await db.$disconnect();
     process.exit(0);
   });
 
-  // Handle graceful shutdown on SIGTERM
   process.once("SIGTERM", async () => {
-    console.log("SIGTERM received, shutting down gracefully");
-    try {
-      await db.$disconnect();
-      console.log("Database connections closed");
-    } catch (e) {
-      console.error("Error during database disconnection:", e);
-    }
+    console.log("SIGTERM received, shutting down...");
+    await db.$disconnect();
     process.exit(0);
   });
 
-  // Handle uncaught exceptions
   process.on("uncaughtException", async (e) => {
-    console.error("Uncaught exception:", e);
-    try {
-      await db.$disconnect();
-      console.log("Database connections closed after exception");
-    } catch (err) {
-      console.error("Error during database disconnection:", err);
-    }
+    console.error("Uncaught Exception:", e);
+    await db.$disconnect();
     process.exit(1);
   });
 
-  // Handle unhandled promise rejections
   process.on("unhandledRejection", async (reason) => {
-    console.error("Unhandled promise rejection:", reason);
-    try {
-      await db.$disconnect();
-      console.log("Database connections closed after unhandled rejection");
-    } catch (e) {
-      console.error("Error during database disconnection:", e);
-    }
+    console.error("Unhandled Rejection:", reason);
+    await db.$disconnect();
     process.exit(1);
   });
 }
