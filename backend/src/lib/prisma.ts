@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 
-// Declare global PrismaClient for development hot-reloading
 declare global {
   // eslint-disable-next-line no-var
   var prisma: PrismaClient | undefined;
@@ -51,7 +50,6 @@ function createPrismaClient(): PrismaClient {
   return client;
 }
 
-// Export db instance — singleton in development, new instance in production
 export const db =
   process.env.NODE_ENV === "production"
     ? createPrismaClient()

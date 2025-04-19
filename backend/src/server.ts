@@ -3,7 +3,7 @@ dotenv.config();
 
 import http from "http";
 import app from "./app";
-import { db } from "./lib/prisma"; // <- Your Prisma client instance
+import { db } from "./lib/prisma";
 import { AddressInfo } from "net";
 
 // Optional future services
