@@ -6,11 +6,13 @@ interface UserData {
   id: string;
   name: string;
   email: string;
+  role: string;
 }
 
 interface AuthResponse {
   user: UserData;
   token?: string;
+  role?: string;
 }
 
 interface SendOtpResponse {
@@ -22,10 +24,16 @@ export const authService = {
   /**
    * Send OTP to user's email for verification
    */
-  async sendOtp(email: string): Promise<SendOtpResponse> {
+  async sendOtp(
+    email: string,
+    name?: string,
+    password?: string
+  ): Promise<SendOtpResponse> {
     try {
       const response = await axios.post(`${API_BASE_URL}/auth/send-otp`, {
         email,
+        name,
+        password,
       });
       return {
         success: true,
@@ -48,8 +56,6 @@ export const authService = {
   async verifyOtpAndRegister(payload: {
     email: string;
     otp: string;
-    name: string;
-    password: string;
   }): Promise<AuthResponse> {
     try {
       const response = await axios.post(
@@ -59,6 +65,7 @@ export const authService = {
       return {
         user: response.data.user,
         token: response.data.token,
+        role: response.data.role,
       };
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -83,6 +90,7 @@ export const authService = {
       return {
         user: response.data.user,
         token: response.data.token,
+        role: response.data.user.role,
       };
     } catch (error) {
       if (axios.isAxiosError(error)) {

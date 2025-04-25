@@ -58,3 +58,23 @@
     at TLSSocket.emit (node:domain:489:12)
     at addChunk (node:internal/streams/readable:561:12)
     at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+2025-04-25 13:37:37 [error]: Error: Invalid credentials
+    at AuthService.<anonymous> (/Users/shahil/Desktop/RMS-MERN/backend/src/services/auth.service.ts:144:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/shahil/Desktop/RMS-MERN/backend/src/services/auth.service.ts:5:58)
+2025-04-25 13:37:37 [error]: Error: Invalid credentials
+    at AuthService.<anonymous> (/Users/shahil/Desktop/RMS-MERN/backend/src/services/auth.service.ts:144:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/shahil/Desktop/RMS-MERN/backend/src/services/auth.service.ts:5:58)
+2025-04-25 13:49:15 [error]: Registration error:
+2025-04-25 13:49:15 [error]: Error: Registration session expired. Please start again.
+    at AuthService.<anonymous> (/Users/shahil/Desktop/RMS-MERN/backend/src/services/auth.service.ts:87:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/shahil/Desktop/RMS-MERN/backend/src/services/auth.service.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-04-25 14:02:38 [error]: Registration error:
+2025-04-25 14:02:38 [error]: Error: Invalid or expired OTP
+    at AuthService.<anonymous> (/Users/shahil/Desktop/RMS-MERN/backend/src/services/auth.service.ts:81:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/shahil/Desktop/RMS-MERN/backend/src/services/auth.service.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)

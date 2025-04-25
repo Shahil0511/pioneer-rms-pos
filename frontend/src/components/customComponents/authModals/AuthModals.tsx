@@ -13,6 +13,17 @@ interface AuthModalProps {
     activeAuthForm: AuthForm;
     onClose: () => void;
     onAuthSuccess: (userData: any) => void;
+    onSwitchForm: (formType: "login" | "signup") => void;
+    formData: {
+        email: string;
+        password: string;
+        name: string;
+    };
+    onFormDataChange: (data: {
+        email: string;
+        password: string;
+        name: string;
+    }) => void;
 }
 
 interface FormData {
@@ -26,12 +37,15 @@ export const AuthModal = ({
     activeAuthForm: initialForm,
     onClose,
     onAuthSuccess,
+    onSwitchForm,
+    formData: externalFormData,
+    onFormDataChange,
 }: AuthModalProps) => {
     const [activeAuthForm, setActiveAuthForm] = useState<AuthForm>(initialForm);
-    const [formData, setFormData] = useState<FormData>({
-        email: "",
-        password: "",
-        name: "",
+    const [internalFormData, setInternalFormData] = useState<FormData>({
+        email: externalFormData.email,
+        password: externalFormData.password,
+        name: externalFormData.name,
         otp: "",
     });
     const [isLoading, setIsLoading] = useState(false);
@@ -48,7 +62,20 @@ export const AuthModal = ({
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+        const newData = {
+            ...internalFormData,
+            [name]: value
+        };
+        setInternalFormData(newData);
+
+        // Update parent component with relevant form data
+        if (name !== "otp") {
+            onFormDataChange({
+                email: newData.email,
+                password: newData.password,
+                name: newData.name
+            });
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -76,15 +103,13 @@ export const AuthModal = ({
     };
 
     const handleSignup = async () => {
-        // Basic validation
-        if (!formData.name || !formData.email || !formData.password) {
+        if (!internalFormData.name || !internalFormData.email || !internalFormData.password) {
             throw new Error("Please fill all fields");
         }
 
-        // Send OTP to email
-        await authService.sendOtp(formData.email);
+        await authService.sendOtp(internalFormData.email, internalFormData.name, internalFormData.password);
         setOtpSent(true);
-        setOtpCountdown(60); // 60 seconds countdown
+        setOtpCountdown(60);
         setActiveAuthForm("verify-email");
         toast({
             title: "OTP Sent",
@@ -93,16 +118,13 @@ export const AuthModal = ({
     };
 
     const handleVerifyEmail = async () => {
-        if (!formData.otp) {
+        if (!internalFormData.otp) {
             throw new Error("Please enter the OTP");
         }
 
-        // Verify OTP and complete registration
         const user = await authService.verifyOtpAndRegister({
-            email: formData.email,
-            otp: formData.otp,
-            name: formData.name,
-            password: formData.password,
+            email: internalFormData.email,
+            otp: internalFormData.otp,
         });
 
         onAuthSuccess(user);
@@ -114,11 +136,11 @@ export const AuthModal = ({
     };
 
     const handleLogin = async () => {
-        if (!formData.email || !formData.password) {
+        if (!internalFormData.email || !internalFormData.password) {
             throw new Error("Please fill all fields");
         }
 
-        const user = await authService.login(formData.email, formData.password);
+        const user = await authService.login(internalFormData.email, internalFormData.password);
         onAuthSuccess(user);
         onClose();
         toast({
@@ -132,7 +154,7 @@ export const AuthModal = ({
 
         setIsLoading(true);
         try {
-            await authService.sendOtp(formData.email);
+            await authService.sendOtp(internalFormData.email);
             setOtpCountdown(60);
             toast({
                 title: "OTP Resent",
@@ -147,16 +169,6 @@ export const AuthModal = ({
         } finally {
             setIsLoading(false);
         }
-    };
-
-    const switchForm = (formType: AuthForm) => {
-        setActiveAuthForm(formType);
-        setFormData({
-            email: formType === "login" ? formData.email : "",
-            password: "",
-            name: "",
-            otp: "",
-        });
     };
 
     return (
@@ -181,7 +193,7 @@ export const AuthModal = ({
                                     <p className="text-center text-sm text-muted-foreground">
                                         We've sent a 6-digit verification code to{" "}
                                         <span className="font-medium text-foreground">
-                                            {formData.email}
+                                            {internalFormData.email}
                                         </span>
                                     </p>
                                 </div>
@@ -192,7 +204,7 @@ export const AuthModal = ({
                                         type="text"
                                         id="otp"
                                         name="otp"
-                                        value={formData.otp}
+                                        value={internalFormData.otp}
                                         onChange={handleInputChange}
                                         placeholder="Enter 6-digit code"
                                         maxLength={6}
@@ -229,7 +241,7 @@ export const AuthModal = ({
                                             type="text"
                                             id="name"
                                             name="name"
-                                            value={formData.name}
+                                            value={internalFormData.name}
                                             onChange={handleInputChange}
                                             required
                                         />
@@ -242,7 +254,7 @@ export const AuthModal = ({
                                         type="email"
                                         id="email"
                                         name="email"
-                                        value={formData.email}
+                                        value={internalFormData.email}
                                         onChange={handleInputChange}
                                         required
                                     />
@@ -254,7 +266,7 @@ export const AuthModal = ({
                                         type="password"
                                         id="password"
                                         name="password"
-                                        value={formData.password}
+                                        value={internalFormData.password}
                                         onChange={handleInputChange}
                                         required
                                         minLength={8}
@@ -296,7 +308,7 @@ export const AuthModal = ({
                                     Don't have an account?{" "}
                                     <Button
                                         variant="link"
-                                        onClick={() => switchForm("signup")}
+                                        onClick={() => onSwitchForm("signup")}
                                         className="px-0"
                                     >
                                         Sign up
@@ -307,7 +319,7 @@ export const AuthModal = ({
                                     Already have an account?{" "}
                                     <Button
                                         variant="link"
-                                        onClick={() => switchForm("login")}
+                                        onClick={() => onSwitchForm("login")}
                                         className="px-0"
                                     >
                                         Login

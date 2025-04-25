@@ -1,4 +1,3 @@
-// src/services/auth.service.ts
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
@@ -14,32 +13,43 @@ const redis = RedisClient.getInstance();
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 const OTP_EXPIRY_MINUTES = parseInt(process.env.OTP_EXPIRY_MINUTES || "15");
 const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || "10");
+const TEMP_DATA_EXPIRY = OTP_EXPIRY_MINUTES * 60;
 
 class AuthService {
   /**
    * Generate and send OTP to user's email
    */
-  async sendOtp(email: string): Promise<{ success: boolean; message: string }> {
+  async sendOtp(
+    email: string,
+    name?: string,
+    password?: string
+  ): Promise<{ success: boolean; message: string }> {
     try {
-      // Validate email format
       if (!this.validateEmail(email)) {
         throw new Error("Invalid email format");
       }
 
-      // Check if user already exists
       const existingUser = await prisma.user.findUnique({ where: { email } });
       if (existingUser) {
         throw new Error("User already exists");
       }
 
-      // Generate OTP
       const otp = generateOTP();
-      const otpExpiry = new Date(Date.now() + OTP_EXPIRY_MINUTES * 60 * 1000);
+      const otpKey = `otp:${email}`;
 
-      // Store OTP in Redis with expiry
-      await redis.setex(`otp:${email}`, OTP_EXPIRY_MINUTES * 60, otp);
+      // Store temporary registration data if provided
+      if (name && password) {
+        const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+        const tempData = { name, password: hashedPassword };
+        await redis.setex(
+          `reg:${email}`,
+          TEMP_DATA_EXPIRY,
+          JSON.stringify(tempData)
+        );
+      }
 
-      // Send email
+      await redis.setex(otpKey, TEMP_DATA_EXPIRY, otp);
+
       await sendEmail({
         to: email,
         subject: "Your Verification OTP",
@@ -48,11 +58,7 @@ class AuthService {
       });
 
       logger.info(`OTP sent to ${email}`);
-
-      return {
-        success: true,
-        message: "OTP sent successfully",
-      };
+      return { success: true, message: "OTP sent successfully" };
     } catch (error) {
       logger.error(`Error sending OTP to ${email}:`, error);
       throw error;
@@ -65,35 +71,23 @@ class AuthService {
   async verifyOtpAndRegister(payload: {
     email: string;
     otp: string;
-    name: string;
-    password: string;
   }): Promise<{ user: any; token: string }> {
     try {
-      const { email, otp, name, password } = payload;
+      const { email, otp } = payload;
 
-      // Validate inputs
-      if (!email || !otp || !name || !password) {
-        throw new Error("All fields are required");
-      }
-
-      if (password.length < 8) {
-        throw new Error("Password must be at least 8 characters");
-      }
-
-      // Verify OTP
+      // Verify OTP first
       const storedOtp = await redis.get(`otp:${email}`);
       if (!storedOtp || storedOtp !== otp) {
         throw new Error("Invalid or expired OTP");
       }
 
-      // Check if user already exists
-      const existingUser = await prisma.user.findUnique({ where: { email } });
-      if (existingUser) {
-        throw new Error("User already exists");
+      // Get registration data from Redis
+      const regData = await redis.get(`reg:${email}`);
+      if (!regData) {
+        throw new Error("Registration session expired. Please start again.");
       }
 
-      // Hash password
-      const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+      const { name, password } = JSON.parse(regData);
 
       // Create user
       const user = await prisma.user.create({
@@ -101,9 +95,9 @@ class AuthService {
           id: uuidv4(),
           email,
           name,
-          password: hashedPassword,
-          role: "CUSTOMER", // Default role
-          status: "ACTIVE", // Mark user as active (verified)
+          password,
+          role: "CUSTOMER",
+          status: "ACTIVE",
         },
         select: {
           id: true,
@@ -114,21 +108,21 @@ class AuthService {
         },
       });
 
-      // Generate JWT token
+      // Generate token and cleanup
       const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
         expiresIn: "7d",
       });
-
-      // Delete OTP from Redis
-      await redis.del(`otp:${email}`);
+      await this.cleanupSession(email);
 
       logger.info(`User registered: ${email}`);
-
       return { user, token };
     } catch (error) {
-      logger.error("Error during registration:", error);
+      logger.error("Registration error:", { error, payload });
       throw error;
     }
+  }
+  private async cleanupSession(email: string): Promise<void> {
+    await Promise.all([redis.del(`otp:${email}`), redis.del(`reg:${email}`)]);
   }
 
   /**
@@ -174,6 +168,7 @@ class AuthService {
           id: user.id,
           email: user.email,
           name: user.name,
+          role: user.role,
         },
         token,
       };

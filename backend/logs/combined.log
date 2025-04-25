@@ -60,3 +60,74 @@
     at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
 2025-04-19 18:03:44 [info]: Email sent to shahilkumar0511@gmail.com
 2025-04-19 18:03:44 [info]: OTP sent to shahilkumar0511@gmail.com
+2025-04-19 19:34:56 [info]: Email sent to hrpioneer0012@gmail.com
+2025-04-19 19:34:56 [info]: OTP sent to hrpioneer0012@gmail.com
+2025-04-19 19:34:58 [info]: Email sent to hrpioneer002@gmail.com
+2025-04-19 19:34:58 [info]: OTP sent to hrpioneer002@gmail.com
+2025-04-19 19:35:15 [warn]: Validation error:
+2025-04-19 19:35:21 [warn]: Validation error:
+2025-04-19 19:35:23 [warn]: Validation error:
+2025-04-19 19:35:24 [warn]: Validation error:
+2025-04-19 19:35:25 [warn]: Validation error:
+2025-04-24 17:45:26 [info]: Email sent to shahilkumar0511@gmail.com
+2025-04-24 17:45:26 [info]: OTP sent to shahilkumar0511@gmail.com
+2025-04-24 17:45:48 [warn]: Validation error:
+2025-04-24 17:51:23 [info]: Email sent to shahilkumar0511@gmail.com
+2025-04-24 17:51:23 [info]: OTP sent to shahilkumar0511@gmail.com
+2025-04-24 17:52:10 [warn]: Validation error:
+2025-04-24 17:54:24 [warn]: Validation error:
+2025-04-24 17:54:30 [warn]: Validation error:
+2025-04-24 17:55:04 [info]: Email sent to shahilkumar0511@gmail.com
+2025-04-24 17:55:04 [info]: OTP sent to shahilkumar0511@gmail.com
+2025-04-24 17:55:21 [warn]: Validation error:
+2025-04-24 18:23:48 [warn]: Validation error:
+2025-04-25 12:52:20 [info]: Email sent to shahilkumar0511@gmail.com
+2025-04-25 12:52:20 [info]: OTP sent to shahilkumar0511@gmail.com
+2025-04-25 12:52:43 [warn]: Validation error:
+2025-04-25 12:55:34 [info]: Email sent to shahilkumar0511@gmail.com
+2025-04-25 12:55:34 [info]: OTP sent to shahilkumar0511@gmail.com
+2025-04-25 12:58:04 [info]: Email sent to shahilkumar0511@gmail.com
+2025-04-25 12:58:04 [info]: OTP sent to shahilkumar0511@gmail.com
+2025-04-25 13:09:21 [info]: Email sent to shahilkumar0511@gmail.com
+2025-04-25 13:09:21 [info]: OTP sent to shahilkumar0511@gmail.com
+2025-04-25 13:09:44 [info]: Email sent to shahilkumar0511@gmail.com
+2025-04-25 13:09:44 [info]: OTP sent to shahilkumar0511@gmail.com
+2025-04-25 13:37:37 [error]: Error: Invalid credentials
+    at AuthService.<anonymous> (/Users/shahil/Desktop/RMS-MERN/backend/src/services/auth.service.ts:144:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/shahil/Desktop/RMS-MERN/backend/src/services/auth.service.ts:5:58)
+2025-04-25 13:37:37 [error]: Error: Invalid credentials
+    at AuthService.<anonymous> (/Users/shahil/Desktop/RMS-MERN/backend/src/services/auth.service.ts:144:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/shahil/Desktop/RMS-MERN/backend/src/services/auth.service.ts:5:58)
+2025-04-25 13:39:11 [info]: Email sent to createadress1@gmail.com
+2025-04-25 13:39:11 [info]: OTP sent to createadress1@gmail.com
+2025-04-25 13:39:30 [warn]: Validation error:
+2025-04-25 13:49:00 [info]: Email sent to shahilkumar0511@gmail.com
+2025-04-25 13:49:00 [info]: OTP sent to shahilkumar0511@gmail.com
+2025-04-25 13:49:15 [error]: Registration error:
+2025-04-25 13:49:15 [error]: Error: Registration session expired. Please start again.
+    at AuthService.<anonymous> (/Users/shahil/Desktop/RMS-MERN/backend/src/services/auth.service.ts:87:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/shahil/Desktop/RMS-MERN/backend/src/services/auth.service.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-04-25 14:02:21 [info]: Email sent to shahilkumar0511@gmail.com
+2025-04-25 14:02:21 [info]: OTP sent to shahilkumar0511@gmail.com
+2025-04-25 14:02:35 [info]: User registered: shahilkumar0511@gmail.com
+2025-04-25 14:02:38 [error]: Registration error:
+2025-04-25 14:02:38 [error]: Error: Invalid or expired OTP
+    at AuthService.<anonymous> (/Users/shahil/Desktop/RMS-MERN/backend/src/services/auth.service.ts:81:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/shahil/Desktop/RMS-MERN/backend/src/services/auth.service.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-04-25 14:11:35 [info]: User logged in: shahilkumar0511@gmail.com
+2025-04-25 15:44:42 [info]: Email sent to createadress1@gmail.com
+2025-04-25 15:44:42 [info]: OTP sent to createadress1@gmail.com
+2025-04-25 15:45:08 [info]: User registered: createadress1@gmail.com
+2025-04-25 15:48:47 [info]: User logged in: createadress1@gmail.com
+2025-04-25 16:35:59 [info]: User logged in: shahilkumar0511@gmail.com
+2025-04-25 16:49:02 [info]: User logged in: shahilkumar0511@gmail.com
+2025-04-25 16:52:39 [info]: Email sent to kshamasharma585@gmail.com
+2025-04-25 16:52:39 [info]: OTP sent to kshamasharma585@gmail.com
+2025-04-25 16:52:51 [info]: User registered: kshamasharma585@gmail.com
+2025-04-25 16:53:07 [info]: User logged in: kshamasharma585@gmail.com

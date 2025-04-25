@@ -32,15 +32,6 @@ export const verifyOtpSchema = z.object({
       .string()
       .length(6, "OTP must be exactly 6 digits")
       .regex(/^\d+$/, "OTP must contain only digits"),
-    name: z
-      .string()
-      .min(2, "Name must be at least 2 characters")
-      .max(50, "Name must be less than 50 characters")
-      .regex(
-        /^[a-zA-Z\s'-]+$/,
-        "Name can only contain letters, spaces, hyphens, and apostrophes"
-      ),
-    password: passwordRequirements,
   }),
 });
 
