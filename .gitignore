@@ -25,6 +25,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+error.log                   # Backend error logs
+combined.log                # Backend combined logs
+logs/                       # Logs directory
 
 # ========================
 # OS-specific files
@@ -65,5 +68,3 @@ node_modules/.prisma/
 # MongoDB dumps (if any)
 # ========================
 dump/
- backend/logs/combined.log
- backend/logs/error.log
