@@ -65,3 +65,5 @@ node_modules/.prisma/
 # MongoDB dumps (if any)
 # ========================
 dump/
+ backend/logs/combined.log
+ backend/logs/error.log
