@@ -86,3 +86,115 @@
     at AuthService.<anonymous> (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:150:15)
     at Generator.next (<anonymous>)
     at fulfilled (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:5:58)
+2025-04-29 19:37:29 [error]: PrismaClientKnownRequestError: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:142:38
+
+  139 }
+  140 
+  141 // Find user
+→ 142 const user = await prisma.user.findUnique(
+The table `public.User` does not exist in the current database.
+    at zn.handleRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at zn.handleAndLogRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at zn.request (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:130:9778)
+2025-04-29 19:37:29 [error]: PrismaClientKnownRequestError: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:142:38
+
+  139 }
+  140 
+  141 // Find user
+→ 142 const user = await prisma.user.findUnique(
+The table `public.User` does not exist in the current database.
+    at zn.handleRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at zn.handleAndLogRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at zn.request (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:130:9778)
+2025-04-29 19:38:01 [error]: PrismaClientKnownRequestError: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:32:46
+
+  29   throw new Error("Invalid email format");
+  30 }
+  31 
+→ 32 const existingUser = await prisma.user.findUnique(
+The table `public.User` does not exist in the current database.
+    at zn.handleRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at zn.handleAndLogRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at zn.request (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:130:9778)
+2025-04-29 19:38:01 [error]: PrismaClientKnownRequestError: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:32:46
+
+  29   throw new Error("Invalid email format");
+  30 }
+  31 
+→ 32 const existingUser = await prisma.user.findUnique(
+The table `public.User` does not exist in the current database.
+    at zn.handleRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at zn.handleAndLogRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at zn.request (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:130:9778)
+2025-04-29 19:39:48 [error]: PrismaClientKnownRequestError: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:142:38
+
+  139 }
+  140 
+  141 // Find user
+→ 142 const user = await prisma.user.findUnique(
+The table `public.User` does not exist in the current database.
+    at zn.handleRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at zn.handleAndLogRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at zn.request (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:130:9778)
+2025-04-29 19:39:48 [error]: PrismaClientKnownRequestError: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:142:38
+
+  139 }
+  140 
+  141 // Find user
+→ 142 const user = await prisma.user.findUnique(
+The table `public.User` does not exist in the current database.
+    at zn.handleRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at zn.handleAndLogRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at zn.request (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:130:9778)
+2025-04-29 19:40:10 [error]: PrismaClientKnownRequestError: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:32:46
+
+  29   throw new Error("Invalid email format");
+  30 }
+  31 
+→ 32 const existingUser = await prisma.user.findUnique(
+The table `public.User` does not exist in the current database.
+    at zn.handleRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at zn.handleAndLogRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at zn.request (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:130:9778)
+2025-04-29 19:40:10 [error]: PrismaClientKnownRequestError: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:32:46
+
+  29   throw new Error("Invalid email format");
+  30 }
+  31 
+→ 32 const existingUser = await prisma.user.findUnique(
+The table `public.User` does not exist in the current database.
+    at zn.handleRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at zn.handleAndLogRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at zn.request (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:130:9778)
+2025-04-29 20:24:19 [error]: Error: Invalid credentials
+    at AuthService.<anonymous> (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:144:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:5:58)
+2025-04-29 20:24:19 [error]: Error: Invalid credentials
+    at AuthService.<anonymous> (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:144:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:5:58)

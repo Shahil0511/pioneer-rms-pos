@@ -19,7 +19,7 @@ export const ProtectedRoute = ({ allowedRoles, children }: ProtectedRouteProps) 
         if (!token || !role || !allowedRoles.includes(role)) {
             localStorage.removeItem("authToken");
             localStorage.removeItem("userRole");
-            navigate('/login');
+            navigate('/');
         }
         setIsLoading(false);
     }, [navigate, allowedRoles]);

@@ -53,6 +53,21 @@ export const AuthModal = ({
     const [otpCountdown, setOtpCountdown] = useState(0);
     const { toast } = useToast();
 
+    // Sync internal state with external form data changes
+    useEffect(() => {
+        setInternalFormData(prev => ({
+            ...prev,
+            email: externalFormData.email,
+            password: externalFormData.password,
+            name: externalFormData.name
+        }));
+    }, [externalFormData]);
+
+    // Handle form switching
+    useEffect(() => {
+        setActiveAuthForm(initialForm);
+    }, [initialForm]);
+
     useEffect(() => {
         if (otpCountdown > 0) {
             const timer = setTimeout(() => setOtpCountdown(otpCountdown - 1), 1000);
@@ -68,7 +83,7 @@ export const AuthModal = ({
         };
         setInternalFormData(newData);
 
-        // Update parent component with relevant form data
+        // Update parent component with relevant form data (except OTP)
         if (name !== "otp") {
             onFormDataChange({
                 email: newData.email,
@@ -114,6 +129,7 @@ export const AuthModal = ({
         toast({
             title: "OTP Sent",
             description: "We've sent a verification code to your email",
+            variant: "success",
         });
     };
 
@@ -125,6 +141,7 @@ export const AuthModal = ({
         const user = await authService.verifyOtpAndRegister({
             email: internalFormData.email,
             otp: internalFormData.otp,
+
         });
 
         onAuthSuccess(user);
@@ -132,6 +149,7 @@ export const AuthModal = ({
         toast({
             title: "Registration Successful",
             description: "Your account has been created successfully",
+            variant: "success"
         });
     };
 
@@ -146,6 +164,7 @@ export const AuthModal = ({
         toast({
             title: "Login Successful",
             description: "You've successfully logged in",
+            variant: "success"
         });
     };
 
@@ -154,11 +173,12 @@ export const AuthModal = ({
 
         setIsLoading(true);
         try {
-            await authService.sendOtp(internalFormData.email);
+            await authService.sendOtp(internalFormData.email, internalFormData.name, internalFormData.password);
             setOtpCountdown(60);
             toast({
                 title: "OTP Resent",
                 description: "We've sent a new verification code to your email",
+                variant: "success"
             });
         } catch (error) {
             toast({
@@ -308,7 +328,10 @@ export const AuthModal = ({
                                     Don't have an account?{" "}
                                     <Button
                                         variant="link"
-                                        onClick={() => onSwitchForm("signup")}
+                                        onClick={() => {
+                                            onSwitchForm("signup");
+                                            setActiveAuthForm("signup");
+                                        }}
                                         className="px-0"
                                     >
                                         Sign up
@@ -319,7 +342,10 @@ export const AuthModal = ({
                                     Already have an account?{" "}
                                     <Button
                                         variant="link"
-                                        onClick={() => onSwitchForm("login")}
+                                        onClick={() => {
+                                            onSwitchForm("login");
+                                            setActiveAuthForm("login");
+                                        }}
                                         className="px-0"
                                     >
                                         Login

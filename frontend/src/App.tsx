@@ -16,8 +16,8 @@ const AppContent = () => {
   const navigate = useNavigate();
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [mounted, setMounted] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
-  const [showSignup, setShowSignup] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [activeAuthForm, setActiveAuthForm] = useState<"login" | "signup">("login");
   const [authFormData, setAuthFormData] = useState<AuthFormData>({
     email: "",
@@ -25,9 +25,15 @@ const AppContent = () => {
     name: ""
   });
 
-  // Theme handling
+  // Check authentication status on mount
   useEffect(() => {
     setMounted(true);
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      setIsAuthenticated(true);
+    }
+
+    // Theme initialization
     const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
     setTheme(savedTheme || (systemPrefersDark ? "dark" : "light"));
@@ -44,6 +50,23 @@ const AppContent = () => {
     setTheme(theme === "dark" ? "light" : "dark");
   };
 
+  const handleLogin = () => {
+    setActiveAuthForm("login");
+    setShowAuthModal(true);
+  };
+
+  const handleSignup = () => {
+    setActiveAuthForm("signup");
+    setShowAuthModal(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userRole");
+    setIsAuthenticated(false);
+    navigate("/");
+  };
+
   const handleAuthFormDataChange = (data: AuthFormData) => {
     setAuthFormData(data);
   };
@@ -53,6 +76,7 @@ const AppContent = () => {
     if (userData.token) {
       localStorage.setItem("authToken", userData.token);
       localStorage.setItem("userRole", userData.role);
+      setIsAuthenticated(true);
 
       // Redirect based on role
       switch (userData.role) {
@@ -76,14 +100,11 @@ const AppContent = () => {
           navigate('/');
       }
     }
-    setShowLogin(false);
-    setShowSignup(false);
+    setShowAuthModal(false);
   };
 
   const handleSwitchForm = (formType: "login" | "signup") => {
     setActiveAuthForm(formType);
-    setShowLogin(formType === "login");
-    setShowSignup(formType === "signup");
   };
 
   if (!mounted) {
@@ -95,22 +116,17 @@ const AppContent = () => {
       <Header
         theme={theme}
         toggleTheme={toggleTheme}
-        setActiveAuthForm={setActiveAuthForm}
-        setShowLogin={setShowLogin}
-        setShowSignup={setShowSignup}
+        isAuthenticated={isAuthenticated}
+        onLogin={handleLogin}
+        onSignup={handleSignup}
+        onLogout={handleLogout}
       />
 
       <Routes>
         <Route path="/" element={
           <Hero
-            onLoginClick={() => {
-              setActiveAuthForm("login");
-              setShowLogin(true);
-            }}
-            onSignupClick={() => {
-              setActiveAuthForm("signup");
-              setShowSignup(true);
-            }}
+            onLoginClick={handleLogin}
+            onSignupClick={handleSignup}
           />
         } />
 
@@ -147,13 +163,10 @@ const AppContent = () => {
       </Routes>
 
       {/* Authentication Modal */}
-      {(showLogin || showSignup) && (
+      {showAuthModal && (
         <AuthModal
           activeAuthForm={activeAuthForm}
-          onClose={() => {
-            setShowLogin(false);
-            setShowSignup(false);
-          }}
+          onClose={() => setShowAuthModal(false)}
           onAuthSuccess={handleAuthSuccess}
           onSwitchForm={handleSwitchForm}
           formData={authFormData}

@@ -2,11 +2,13 @@
 
 import * as React from "react";
 import { X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { CheckCircle2, AlertCircle, Info, XCircle } from "lucide-react";
 
-const TOAST_LIMIT = 1;
-const TOAST_REMOVE_DELAY = 1000000;
+const TOAST_LIMIT = 5;
+const TOAST_REMOVE_DELAY = 1900;
 
-type ToastVariant = "default" | "destructive";
+type ToastVariant = "default" | "destructive" | "success" | "warning" | "info";
 
 type ToasterToast = {
     id: string;
@@ -59,14 +61,9 @@ interface State {
 const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
 
 const addToRemoveQueue = (toastId: string) => {
-    console.log("Adding to remove queue:", toastId);
-    if (toastTimeouts.has(toastId)) {
-        console.log("Toast already in remove queue:", toastId);
-        return;
-    }
+    if (toastTimeouts.has(toastId)) return;
 
     const timeout = setTimeout(() => {
-        console.log("Remove timeout triggered for toast:", toastId);
         toastTimeouts.delete(toastId);
         dispatch({
             type: "REMOVE_TOAST",
@@ -78,18 +75,14 @@ const addToRemoveQueue = (toastId: string) => {
 };
 
 export const reducer = (state: State, action: Action): State => {
-    console.log("Toast reducer called with action:", action.type, action);
-
     switch (action.type) {
         case "ADD_TOAST":
-            console.log("Adding toast to state:", action.toast);
             return {
                 ...state,
                 toasts: [action.toast, ...state.toasts].slice(0, TOAST_LIMIT),
             };
 
         case "UPDATE_TOAST":
-            console.log("Updating toast:", action.toast);
             return {
                 ...state,
                 toasts: state.toasts.map((t) =>
@@ -99,8 +92,6 @@ export const reducer = (state: State, action: Action): State => {
 
         case "DISMISS_TOAST": {
             const { toastId } = action;
-            console.log("Dismissing toast:", toastId || "all toasts");
-
             if (toastId) {
                 addToRemoveQueue(toastId);
             } else {
@@ -122,7 +113,6 @@ export const reducer = (state: State, action: Action): State => {
             };
         }
         case "REMOVE_TOAST":
-            console.log("Removing toast:", action.toastId || "all toasts");
             if (action.toastId === undefined) {
                 return {
                     ...state,
@@ -141,11 +131,8 @@ const listeners: Array<(state: State) => void> = [];
 let memoryState: State = { toasts: [] };
 
 function dispatch(action: Action) {
-    console.log("Dispatching action:", action.type);
     memoryState = reducer(memoryState, action);
-    console.log("Memory state after action:", memoryState);
     listeners.forEach((listener) => {
-        console.log("Notifying listener about state change");
         listener(memoryState);
     });
 }
@@ -153,12 +140,9 @@ function dispatch(action: Action) {
 type ToastOptions = Omit<ToasterToast, "id" | "open" | "onOpenChange">;
 
 function toast(opts: ToastOptions) {
-    console.log("Toast function called with options:", opts);
     const id = genId();
-    console.log("Generated ID for toast:", id);
 
     const update = (props: ToastOptions) => {
-        console.log("Update function called for toast:", id, props);
         dispatch({
             type: "UPDATE_TOAST",
             toast: { ...props, id },
@@ -166,7 +150,6 @@ function toast(opts: ToastOptions) {
     };
 
     const dismiss = () => {
-        console.log("Dismiss function called for toast:", id);
         dispatch({ type: "DISMISS_TOAST", toastId: id });
     };
 
@@ -177,13 +160,11 @@ function toast(opts: ToastOptions) {
             id,
             open: true,
             onOpenChange: (open) => {
-                console.log("onOpenChange called with:", open, "for toast:", id);
                 if (!open) dismiss();
             },
         },
     });
 
-    console.log("Returning toast controls for ID:", id);
     return {
         id,
         dismiss,
@@ -192,14 +173,11 @@ function toast(opts: ToastOptions) {
 }
 
 function useToast() {
-    console.log("useToast hook called");
     const [state, setState] = React.useState<State>(memoryState);
 
     React.useEffect(() => {
-        console.log("useToast effect running, registering listener");
         listeners.push(setState);
         return () => {
-            console.log("useToast cleanup, removing listener");
             const index = listeners.indexOf(setState);
             if (index > -1) {
                 listeners.splice(index, 1);
@@ -207,64 +185,152 @@ function useToast() {
         };
     }, []);
 
-    console.log("Current toasts in useToast:", state.toasts);
     return {
         ...state,
         toast,
-        dismiss: (toastId?: string) => {
-            console.log("Dismiss called from useToast for:", toastId || "all toasts");
-            dispatch({ type: "DISMISS_TOAST", toastId });
-        },
+        dismiss: (toastId?: string) => dispatch({ type: "DISMISS_TOAST", toastId }),
     };
 }
 
-export function ToastComponent() {
-    console.log("ToastComponent rendering");
-    const { toasts } = useToast();
-    console.log("Toasts in ToastComponent:", toasts);
+// Enhanced styling for enterprise look and feel
+type ToastVariantStyles = {
+    bg: string;
+    text: string;
+    border: string;
+    icon: React.ReactNode | null;
+    progress: string;
+    shadow: string;
+};
 
-    if (!toasts.length) {
-        console.log("No toasts to render, returning null");
-        return null;
-    }
+const getVariantStyles = (variant: ToastVariant = "default"): ToastVariantStyles => {
+    const baseIconClass = "h-5 w-5 transition-opacity duration-200 ease-in-out";
 
-    const variantClasses = {
-        default: "bg-background text-foreground border",
-        destructive:
-            "bg-destructive text-destructive-foreground border-destructive",
+    const variants: Record<ToastVariant, ToastVariantStyles> = {
+        destructive: {
+            bg: "bg-red-500/95 dark:bg-red-600/95 backdrop-blur-sm",
+            text: "text-white",
+            border: "border-red-600/30 dark:border-red-700/50",
+            icon: <XCircle className={`${baseIconClass} text-red-100`} />,
+            progress: "bg-gradient-to-r from-red-400 to-red-500",
+            shadow: "shadow-lg shadow-red-500/20 dark:shadow-red-700/20",
+        },
+        success: {
+            bg: "bg-emerald-500/95 dark:bg-emerald-600/95 backdrop-blur-sm",
+            text: "text-white",
+            border: "border-emerald-600/30 dark:border-emerald-700/50",
+            icon: <CheckCircle2 className={`${baseIconClass} text-emerald-100`} />,
+            progress: "bg-gradient-to-r from-emerald-400 to-emerald-500",
+            shadow: "shadow-lg shadow-emerald-500/20 dark:shadow-emerald-700/20",
+        },
+        warning: {
+            bg: "bg-amber-400/95 dark:bg-amber-500/95 backdrop-blur-sm",
+            text: "text-amber-900 dark:text-amber-950",
+            border: "border-amber-500/30 dark:border-amber-600/50",
+            icon: <AlertCircle className={`${baseIconClass} text-amber-800`} />,
+            progress: "bg-gradient-to-r from-amber-300 to-amber-400",
+            shadow: "shadow-lg shadow-amber-400/20 dark:shadow-amber-500/20",
+        },
+        info: {
+            bg: "bg-blue-500/95 dark:bg-blue-600/95 backdrop-blur-sm",
+            text: "text-white",
+            border: "border-blue-600/30 dark:border-blue-700/50",
+            icon: <Info className={`${baseIconClass} text-blue-100`} />,
+            progress: "bg-gradient-to-r from-blue-400 to-blue-500",
+            shadow: "shadow-lg shadow-blue-500/20 dark:shadow-blue-700/20",
+        },
+        default: {
+            bg: "bg-white/95 dark:bg-zinc-800/95 backdrop-blur-sm",
+            text: "text-zinc-800 dark:text-zinc-100",
+            border: "border-zinc-200/80 dark:border-zinc-700/50",
+            icon: null,
+            progress: "bg-gradient-to-r from-zinc-300 to-zinc-400 dark:from-zinc-600 dark:to-zinc-700",
+            shadow: "shadow-lg shadow-black/5 dark:shadow-white/5",
+        },
     };
 
-    console.log("Rendering toast container with toasts:", toasts);
+    return variants[variant];
+};
+
+export function ToastComponent() {
+    const { toasts } = useToast();
+
     return (
-        <div className="fixed bottom-4 right-4 z-[100] space-y-2">
-            {toasts.map((toast) => {
-                console.log("Rendering individual toast:", toast.id);
-                return (
-                    <div
+        <div className="fixed top-4 right-4 z-[100] space-y-3 pointer-events-none">
+            <AnimatePresence>
+                {toasts.map((toast) => (
+                    <motion.div
                         key={toast.id}
-                        className={`p-4 rounded-lg shadow-lg w-[350px] ${variantClasses[toast.variant || "default"]
-                            }`}
+                        layout
+                        initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, x: 100, transition: { duration: 0.2 } }}
+                        transition={{
+                            type: "spring",
+                            damping: 20,
+                            stiffness: 300
+                        }}
+                        className="pointer-events-auto"
                     >
-                        <div className="flex justify-between items-start gap-4">
-                            <div className="flex-1">
-                                {toast.title && <h3 className="font-medium">{toast.title}</h3>}
-                                <p className="text-sm">{toast.description}</p>
-                            </div>
-                            <button
-                                onClick={() => {
-                                    console.log("Close button clicked for toast:", toast.id);
-                                    toast.onOpenChange?.(false);
-                                }}
-                                className="p-1 rounded-md hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
-                            >
-                                <X className="h-4 w-4" />
-                            </button>
-                        </div>
-                    </div>
-                );
-            })}
+                        <ToastItem toast={toast} />
+                    </motion.div>
+                ))}
+            </AnimatePresence>
         </div>
     );
 }
+
+const ToastItem = ({ toast }: { toast: ToasterToast }) => {
+    const { dismiss } = useToast();
+    const variantStyles = getVariantStyles(toast.variant);
+
+    React.useEffect(() => {
+        if (toast.open) {
+            const timer = setTimeout(() => {
+                dismiss(toast.id);
+            }, TOAST_REMOVE_DELAY);
+
+            return () => clearTimeout(timer);
+        }
+    }, [toast.open, toast.id, dismiss]);
+
+    return (
+        <div
+            className={`relative p-4 rounded-lg ${variantStyles.shadow} w-[350px] border ${variantStyles.bg} ${variantStyles.text} ${variantStyles.border} overflow-hidden`}
+            role="alert"
+        >
+            <div className="flex gap-3">
+                {variantStyles.icon && (
+                    <div className="flex-shrink-0 pt-0.5">{variantStyles.icon}</div>
+                )}
+                <div className="flex-1 min-w-0">
+                    {toast.title && (
+                        <h3 className="font-medium leading-6 truncate pr-6">{toast.title}</h3>
+                    )}
+                    {toast.description && (
+                        <p className="mt-1 text-sm opacity-90 line-clamp-2">{toast.description}</p>
+                    )}
+                    {toast.action && (
+                        <div className="mt-2 flex justify-end">{toast.action}</div>
+                    )}
+                </div>
+                <button
+                    onClick={() => toast.onOpenChange?.(false)}
+                    className="absolute top-2 right-2 p-1 rounded-md opacity-70 hover:opacity-100 transition-opacity focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background focus:ring-primary"
+                    aria-label="Close notification"
+                >
+                    <X className="h-4 w-4" />
+                </button>
+            </div>
+            {toast.open && (
+                <motion.div
+                    initial={{ width: "100%" }}
+                    animate={{ width: "0%" }}
+                    transition={{ duration: TOAST_REMOVE_DELAY / 1000, ease: "linear" }}
+                    className={`absolute bottom-0 left-0 h-1 ${variantStyles.progress}`}
+                />
+            )}
+        </div>
+    );
+};
 
 export { useToast, toast };

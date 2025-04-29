@@ -151,3 +151,150 @@
 2025-04-28 13:42:32 [info]: OTP sent to hrpioneer0012@gmail.com
 2025-04-28 13:43:00 [info]: User registered: hrpioneer0012@gmail.com
 2025-04-28 13:43:08 [info]: User logged in: hrpioneer0012@gmail.com
+2025-04-29 17:18:42 [info]: User logged in: shahilkumar0511@gmail.com
+2025-04-29 17:48:31 [info]: User logged in: shahilkumar0511@gmail.com
+2025-04-29 17:54:58 [info]: User logged in: shahilkumar0511@gmail.com
+2025-04-29 17:56:17 [info]: User logged in: shahilkumar0511@gmail.com
+2025-04-29 17:59:19 [info]: User logged in: shahilkumar0511@gmail.com
+2025-04-29 19:37:29 [error]: PrismaClientKnownRequestError: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:142:38
+
+  139 }
+  140 
+  141 // Find user
+→ 142 const user = await prisma.user.findUnique(
+The table `public.User` does not exist in the current database.
+    at zn.handleRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at zn.handleAndLogRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at zn.request (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:130:9778)
+2025-04-29 19:37:29 [error]: PrismaClientKnownRequestError: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:142:38
+
+  139 }
+  140 
+  141 // Find user
+→ 142 const user = await prisma.user.findUnique(
+The table `public.User` does not exist in the current database.
+    at zn.handleRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at zn.handleAndLogRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at zn.request (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:130:9778)
+2025-04-29 19:38:01 [error]: PrismaClientKnownRequestError: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:32:46
+
+  29   throw new Error("Invalid email format");
+  30 }
+  31 
+→ 32 const existingUser = await prisma.user.findUnique(
+The table `public.User` does not exist in the current database.
+    at zn.handleRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at zn.handleAndLogRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at zn.request (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:130:9778)
+2025-04-29 19:38:01 [error]: PrismaClientKnownRequestError: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:32:46
+
+  29   throw new Error("Invalid email format");
+  30 }
+  31 
+→ 32 const existingUser = await prisma.user.findUnique(
+The table `public.User` does not exist in the current database.
+    at zn.handleRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at zn.handleAndLogRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at zn.request (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:130:9778)
+2025-04-29 19:39:48 [error]: PrismaClientKnownRequestError: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:142:38
+
+  139 }
+  140 
+  141 // Find user
+→ 142 const user = await prisma.user.findUnique(
+The table `public.User` does not exist in the current database.
+    at zn.handleRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at zn.handleAndLogRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at zn.request (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:130:9778)
+2025-04-29 19:39:48 [error]: PrismaClientKnownRequestError: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:142:38
+
+  139 }
+  140 
+  141 // Find user
+→ 142 const user = await prisma.user.findUnique(
+The table `public.User` does not exist in the current database.
+    at zn.handleRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at zn.handleAndLogRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at zn.request (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:130:9778)
+2025-04-29 19:40:10 [error]: PrismaClientKnownRequestError: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:32:46
+
+  29   throw new Error("Invalid email format");
+  30 }
+  31 
+→ 32 const existingUser = await prisma.user.findUnique(
+The table `public.User` does not exist in the current database.
+    at zn.handleRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at zn.handleAndLogRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at zn.request (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:130:9778)
+2025-04-29 19:40:10 [error]: PrismaClientKnownRequestError: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:32:46
+
+  29   throw new Error("Invalid email format");
+  30 }
+  31 
+→ 32 const existingUser = await prisma.user.findUnique(
+The table `public.User` does not exist in the current database.
+    at zn.handleRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at zn.handleAndLogRequestError (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at zn.request (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/node_modules/@prisma/client/runtime/library.js:130:9778)
+2025-04-29 19:43:29 [info]: Email sent to shahilkumar0511@gmail.com
+2025-04-29 19:43:29 [info]: OTP sent to shahilkumar0511@gmail.com
+2025-04-29 19:43:48 [info]: User registered: shahilkumar0511@gmail.com
+2025-04-29 19:43:55 [info]: User logged in: shahilkumar0511@gmail.com
+2025-04-29 19:57:22 [info]: User logged in: shahilkumar0511@gmail.com
+2025-04-29 20:00:28 [info]: User logged in: shahilkumar0511@gmail.com
+2025-04-29 20:00:37 [info]: User logged in: shahilkumar0511@gmail.com
+2025-04-29 20:05:29 [info]: User logged in: shahilkumar0511@gmail.com
+2025-04-29 20:05:54 [info]: User logged in: shahilkumar0511@gmail.com
+2025-04-29 20:13:26 [info]: User logged in: shahilkumar0511@gmail.com
+2025-04-29 20:23:22 [info]: User logged in: shahilkumar0511@gmail.com
+2025-04-29 20:23:36 [info]: User logged in: shahilkumar0511@gmail.com
+2025-04-29 20:24:19 [error]: Error: Invalid credentials
+    at AuthService.<anonymous> (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:144:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:5:58)
+2025-04-29 20:24:19 [error]: Error: Invalid credentials
+    at AuthService.<anonymous> (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:144:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/shahil/Desktop/RMS/pioneer-rms-pos/backend/src/services/auth.service.ts:5:58)
+2025-04-29 20:24:35 [info]: Email sent to hrpioneer0012@gmail.com
+2025-04-29 20:24:35 [info]: OTP sent to hrpioneer0012@gmail.com
+2025-04-29 20:24:51 [info]: User registered: hrpioneer0012@gmail.com
+2025-04-29 20:25:08 [info]: User logged in: hrpioneer0012@gmail.com
+2025-04-29 20:28:23 [info]: User logged in: shahilkumar0511@gmail.com
+2025-04-29 20:29:24 [info]: User logged in: shahilkumar0511@gmail.com
+2025-04-29 20:30:41 [info]: User logged in: shahilkumar0511@gmail.com
+2025-04-29 20:33:27 [info]: User logged in: shahilkumar0511@gmail.com
+2025-04-29 20:38:32 [info]: User logged in: shahilkumar0511@gmail.com
+2025-04-29 20:47:29 [info]: Email sent to createadress1@gmail.com
+2025-04-29 20:47:29 [info]: OTP sent to createadress1@gmail.com
+2025-04-29 20:47:47 [info]: User registered: createadress1@gmail.com
+2025-04-29 20:48:27 [info]: User logged in: createadress1@gmail.com
+2025-04-29 20:48:43 [info]: User logged in: createadress1@gmail.com
+2025-04-29 20:49:58 [info]: Email sent to shahilkumar2coc@gmail.com
+2025-04-29 20:49:58 [info]: OTP sent to shahilkumar2coc@gmail.com
+2025-04-29 20:50:28 [info]: User registered: shahilkumar2coc@gmail.com
+2025-04-29 20:50:44 [info]: User logged in: shahilkumar2coc@gmail.com
