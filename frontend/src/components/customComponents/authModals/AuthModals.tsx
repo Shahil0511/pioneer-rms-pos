@@ -5,7 +5,15 @@ import { Input } from "../../ui/input";
 import { Label } from "../../ui/label";
 import { XCircle, LogIn, UserPlus, MailCheck, RotateCw } from "lucide-react";
 import { useToast } from "../../ui/toast/Toast";
-import { authService } from "../../../services/authService";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import {
+    loginUser,
+    sendOtp,
+    verifyOtpAndRegister,
+    setOtpCountdown,
+    decrementOtpCountdown,
+    updateFormData
+} from "../../../store/slices/authSlice";
 
 type AuthForm = "login" | "signup" | "verify-email";
 
@@ -41,6 +49,9 @@ export const AuthModal = ({
     formData: externalFormData,
     onFormDataChange,
 }: AuthModalProps) => {
+    const dispatch = useAppDispatch();
+    const { loading, error, otpCountdown } = useAppSelector((state) => state.auth);
+
     const [activeAuthForm, setActiveAuthForm] = useState<AuthForm>(initialForm);
     const [internalFormData, setInternalFormData] = useState<FormData>({
         email: externalFormData.email,
@@ -48,9 +59,7 @@ export const AuthModal = ({
         name: externalFormData.name,
         otp: "",
     });
-    const [isLoading, setIsLoading] = useState(false);
     const [, setOtpSent] = useState(false);
-    const [otpCountdown, setOtpCountdown] = useState(0);
     const { toast } = useToast();
 
     // Sync internal state with external form data changes
@@ -68,12 +77,24 @@ export const AuthModal = ({
         setActiveAuthForm(initialForm);
     }, [initialForm]);
 
+    // Handle OTP countdown timer
     useEffect(() => {
         if (otpCountdown > 0) {
-            const timer = setTimeout(() => setOtpCountdown(otpCountdown - 1), 1000);
+            const timer = setTimeout(() => dispatch(decrementOtpCountdown()), 1000);
             return () => clearTimeout(timer);
         }
-    }, [otpCountdown]);
+    }, [otpCountdown, dispatch]);
+
+    // Display error toast when error occurs
+    useEffect(() => {
+        if (error) {
+            toast({
+                title: "Error",
+                description: error,
+                variant: "destructive",
+            });
+        }
+    }, [error, toast]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -83,19 +104,21 @@ export const AuthModal = ({
         };
         setInternalFormData(newData);
 
-        // Update parent component with relevant form data (except OTP)
+        // Update redux store form data for relevant fields
         if (name !== "otp") {
+            dispatch(updateFormData({ field: name, value }));
+
+            // Also update parent component's state
             onFormDataChange({
-                email: newData.email,
-                password: newData.password,
-                name: newData.name
+                email: name === "email" ? value : internalFormData.email,
+                password: name === "password" ? value : internalFormData.password,
+                name: name === "name" ? value : internalFormData.name
             });
         }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setIsLoading(true);
 
         try {
             if (activeAuthForm === "signup") {
@@ -107,87 +130,116 @@ export const AuthModal = ({
             }
         } catch (error) {
             console.error("Authentication error:", error);
-            toast({
-                title: "Error",
-                description: error instanceof Error ? error.message : "An unknown error occurred",
-                variant: "destructive",
-            });
-        } finally {
-            setIsLoading(false);
         }
     };
 
     const handleSignup = async () => {
         if (!internalFormData.name || !internalFormData.email || !internalFormData.password) {
-            throw new Error("Please fill all fields");
+            toast({
+                title: "Error",
+                description: "Please fill all fields",
+                variant: "destructive",
+            });
+            return;
         }
 
-        await authService.sendOtp(internalFormData.email, internalFormData.name, internalFormData.password);
-        setOtpSent(true);
-        setOtpCountdown(60);
-        setActiveAuthForm("verify-email");
-        toast({
-            title: "OTP Sent",
-            description: "We've sent a verification code to your email",
-            variant: "success",
-        });
+        const resultAction = await dispatch(
+            sendOtp({
+                email: internalFormData.email,
+                name: internalFormData.name,
+                password: internalFormData.password
+            })
+        );
+
+        if (sendOtp.fulfilled.match(resultAction)) {
+            setOtpSent(true);
+            setActiveAuthForm("verify-email");
+            toast({
+                title: "OTP Sent",
+                description: "We've sent a verification code to your email",
+                variant: "success",
+            });
+        }
     };
 
     const handleVerifyEmail = async () => {
         if (!internalFormData.otp) {
-            throw new Error("Please enter the OTP");
+            toast({
+                title: "Error",
+                description: "Please enter the OTP",
+                variant: "destructive",
+            });
+            return;
         }
 
-        const user = await authService.verifyOtpAndRegister({
-            email: internalFormData.email,
-            otp: internalFormData.otp,
+        const resultAction = await dispatch(
+            verifyOtpAndRegister({
+                email: internalFormData.email,
+                otp: internalFormData.otp
+            })
+        );
 
-        });
-
-        onAuthSuccess(user);
-        onClose();
-        toast({
-            title: "Registration Successful",
-            description: "Your account has been created successfully",
-            variant: "success"
-        });
+        if (verifyOtpAndRegister.fulfilled.match(resultAction)) {
+            const userData = resultAction.payload;
+            if (!userData.role) {
+                userData.role = "CUSTOMER";
+            }
+            onAuthSuccess(userData);
+            onClose();
+            toast({
+                title: "Registration Successful",
+                description: "Your account has been created successfully",
+                variant: "success"
+            });
+        }
     };
 
     const handleLogin = async () => {
         if (!internalFormData.email || !internalFormData.password) {
-            throw new Error("Please fill all fields");
+            toast({
+                title: "Error",
+                description: "Please fill all fields",
+                variant: "destructive",
+            });
+            return;
         }
 
-        const user = await authService.login(internalFormData.email, internalFormData.password);
-        onAuthSuccess(user);
-        onClose();
-        toast({
-            title: "Login Successful",
-            description: "You've successfully logged in",
-            variant: "success"
-        });
+        const resultAction = await dispatch(
+            loginUser({
+                email: internalFormData.email,
+                password: internalFormData.password
+            })
+        );
+
+        if (loginUser.fulfilled.match(resultAction)) {
+            onAuthSuccess(resultAction.payload);
+            onClose();
+            toast({
+                title: "Login Successful",
+                description: "You've successfully logged in",
+                variant: "success"
+            });
+        }
     };
 
     const resendOtp = async () => {
         if (otpCountdown > 0) return;
 
-        setIsLoading(true);
-        try {
-            await authService.sendOtp(internalFormData.email, internalFormData.name, internalFormData.password);
-            setOtpCountdown(60);
+        const resultAction = await dispatch(
+            sendOtp({
+                email: internalFormData.email,
+                name: internalFormData.name,
+                password: internalFormData.password
+            })
+        );
+
+        if (sendOtp.fulfilled.match(resultAction)) {
+            dispatch(setOtpCountdown(60));
             toast({
                 title: "OTP Resent",
                 description: "We've sent a new verification code to your email",
                 variant: "success"
             });
-        } catch (error) {
-            toast({
-                title: "Error",
-                description: error instanceof Error ? error.message : "Failed to resend OTP",
-                variant: "destructive",
-            });
-        } finally {
-            setIsLoading(false);
         }
     };
 
@@ -236,10 +288,10 @@ export const AuthModal = ({
                                     <Button
                                         variant="link"
                                         onClick={resendOtp}
-                                        disabled={otpCountdown > 0 || isLoading}
+                                        disabled={otpCountdown > 0 || loading}
                                         className="px-0"
                                     >
-                                        {isLoading ? (
+                                        {loading ? (
                                             <RotateCw className="h-4 w-4 animate-spin" />
                                         ) : (
                                             <>
@@ -298,9 +350,9 @@ export const AuthModal = ({
                         <Button
                             type="submit"
                             className="w-full flex gap-2"
-                            disabled={isLoading}
+                            disabled={loading}
                         >
-                            {isLoading ? (
+                            {loading ? (
                                 <RotateCw className="h-5 w-5 animate-spin" />
                             ) : activeAuthForm === "login" ? (
                                 <>

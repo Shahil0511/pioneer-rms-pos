@@ -3,6 +3,7 @@
 import { Sun, Moon, LogIn, UserPlus, Utensils, LogOut } from "lucide-react";
 import { Button } from "../../ui/button";
 import { toast } from "../../ui/toast/Toast";
+import { useAppSelector } from "../../../store/hooks";
 
 interface HeaderProps {
     theme: "light" | "dark";
@@ -21,6 +22,7 @@ export const Header = ({
     onSignup,
     onLogout,
 }: HeaderProps) => {
+    const { user } = useAppSelector((state) => state.auth);
 
     const handleLogoutWithToast = () => {
         onLogout();
@@ -40,6 +42,7 @@ export const Header = ({
                 </div>
 
                 <div className="flex items-center space-x-4">
+                    {/* Theme Toggle */}
                     <Button
                         variant="ghost"
                         size="icon"
@@ -47,13 +50,21 @@ export const Header = ({
                         aria-label="Toggle theme"
                         className="hover:bg-transparent"
                     >
-                        {theme === 'dark' ? (
+                        {theme === "dark" ? (
                             <Sun className="h-5 w-5" />
                         ) : (
                             <Moon className="h-5 w-5" />
                         )}
                     </Button>
 
+                    {/* User Greeting (if authenticated) */}
+                    {isAuthenticated && user && (
+                        <span className="hidden md:inline text-sm font-medium text-muted-foreground">
+                            Hello, {user.name}
+                        </span>
+                    )}
+
+                    {/* Auth Buttons */}
                     <div className="hidden md:flex space-x-2">
                         {isAuthenticated ? (
                             <Button

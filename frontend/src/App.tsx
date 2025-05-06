@@ -1,44 +1,47 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "./store/hooks";
 import { Header } from "./components/customComponents/headers/BannerPage";
 import { AuthModal } from "./components/customComponents/authModals/AuthModals";
 import { Hero } from "./pages/Hero";
 import { Dashboard } from "./components/pageComponents/Dashboard";
 import { ProtectedRoute } from "./components/customComponents/ProtectedRoute/ProtectedRoute";
-
-type AuthFormData = {
-  email: string;
-  password: string;
-  name: string;
-};
+import {
+  toggleAuthModal,
+  setActiveAuthForm,
+  logout,
+  setFormData
+} from "./store/slices/authSlice";
+import { toggleTheme, setTheme } from "./store/slices/themeSlice";
 
 const AppContent = () => {
   const navigate = useNavigate();
-  const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [mounted, setMounted] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [activeAuthForm, setActiveAuthForm] = useState<"login" | "signup">("login");
-  const [authFormData, setAuthFormData] = useState<AuthFormData>({
-    email: "",
-    password: "",
-    name: ""
-  });
+  const dispatch = useAppDispatch();
 
-  // Check authentication status on mount
+  // Redux state
+  const { mode: theme } = useAppSelector((state) => state.theme);
+  const {
+    isAuthenticated,
+    showAuthModal,
+    activeAuthForm,
+    formData,
+  } = useAppSelector((state) => state.auth);
+
+  const [mounted, setMounted] = useState(false);
+
+  // Initial setup on mount
   useEffect(() => {
     setMounted(true);
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      setIsAuthenticated(true);
-    }
 
-    // Theme initialization
+    // Check for system preferred theme
     const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
-    setTheme(savedTheme || (systemPrefersDark ? "dark" : "light"));
-  }, []);
+    dispatch(setTheme(savedTheme || (systemPrefersDark ? "dark" : "light")));
 
+    // Token check is handled by redux-persist, so no need to manually check it here
+  }, [dispatch]);
+
+  // Apply theme changes to DOM
   useEffect(() => {
     if (mounted) {
       document.documentElement.classList.toggle("dark", theme === "dark");
@@ -46,65 +49,75 @@ const AppContent = () => {
     }
   }, [theme, mounted]);
 
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
+  const handleThemeToggle = () => {
+    dispatch(toggleTheme());
   };
 
   const handleLogin = () => {
-    setActiveAuthForm("login");
-    setShowAuthModal(true);
+    dispatch(setActiveAuthForm("login"));
+    dispatch(toggleAuthModal(true));
   };
 
   const handleSignup = () => {
-    setActiveAuthForm("signup");
-    setShowAuthModal(true);
+    dispatch(setActiveAuthForm("signup"));
+    dispatch(toggleAuthModal(true));
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("userRole");
-    setIsAuthenticated(false);
+    dispatch(logout());
     navigate("/");
   };
 
-  const handleAuthFormDataChange = (data: AuthFormData) => {
-    setAuthFormData(data);
+  const handleAuthFormDataChange = (data: {
+    email: string;
+    password: string;
+    name: string;
+  }) => {
+    dispatch(setFormData(data));
   };
 
   const handleAuthSuccess = (userData: any) => {
-    console.log("Authentication successful:", userData);
-    if (userData.token) {
-      localStorage.setItem("authToken", userData.token);
-      localStorage.setItem("userRole", userData.role);
-      setIsAuthenticated(true);
+    console.log("Auth success called with userData:", userData);
 
-      // Redirect based on role
-      switch (userData.role) {
-        case "SUPER_ADMIN":
-        case "ADMIN":
-          navigate('/admin/dashboard');
-          break;
-        case "MANAGER":
-          navigate('/manager/dashboard');
-          break;
-        case "KITCHEN":
-          navigate('/kitchen/dashboard');
-          break;
-        case "DELIVERY":
-          navigate('/delivery/dashboard');
-          break;
-        case "CUSTOMER":
-          navigate('/customer/dashboard');
-          break;
-        default:
-          navigate('/');
-      }
+    // Ensure userData has a role, default to CUSTOMER if not provided
+    const userRole = userData?.role || "CUSTOMER";
+
+    // Store the token and role in localStorage
+    localStorage.setItem("authToken", userData.token);
+    localStorage.setItem("userRole", userRole);
+
+    // Determine target route based on user role
+    let targetRoute = '/';
+    switch (userRole) {
+      case "SUPER_ADMIN":
+      case "ADMIN":
+        targetRoute = '/admin/dashboard';
+        break;
+      case "MANAGER":
+        targetRoute = '/manager/dashboard';
+        break;
+      case "KITCHEN":
+        targetRoute = '/kitchen/dashboard';
+        break;
+      case "DELIVERY":
+        targetRoute = '/delivery/dashboard';
+        break;
+      case "CUSTOMER":
+      default:
+        targetRoute = '/customer/dashboard';
     }
-    setShowAuthModal(false);
+
+    console.log("Navigating to:", targetRoute);
+
+    // Close the modal
+    dispatch(toggleAuthModal(false));
+
+    // Navigate immediately
+    navigate(targetRoute);
   };
 
   const handleSwitchForm = (formType: "login" | "signup") => {
-    setActiveAuthForm(formType);
+    dispatch(setActiveAuthForm(formType));
   };
 
   if (!mounted) {
@@ -115,7 +128,7 @@ const AppContent = () => {
     <div className="min-h-screen transition-colors duration-300 bg-background text-foreground">
       <Header
         theme={theme}
-        toggleTheme={toggleTheme}
+        toggleTheme={handleThemeToggle}
         isAuthenticated={isAuthenticated}
         onLogin={handleLogin}
         onSignup={handleSignup}
@@ -166,10 +179,10 @@ const AppContent = () => {
       {showAuthModal && (
         <AuthModal
           activeAuthForm={activeAuthForm}
-          onClose={() => setShowAuthModal(false)}
+          onClose={() => dispatch(toggleAuthModal(false))}
           onAuthSuccess={handleAuthSuccess}
           onSwitchForm={handleSwitchForm}
-          formData={authFormData}
+          formData={formData}
           onFormDataChange={handleAuthFormDataChange}
         />
       )}
