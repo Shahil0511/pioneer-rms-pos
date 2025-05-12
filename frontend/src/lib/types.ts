@@ -1,4 +1,44 @@
-import { clsx, type ClassValue } from "clsx";
+// lib/types.ts
+export interface DashboardProps {
+  role: string;
+  userName: string;
+}
+
+export interface MenuItem {
+  id: number;
+  name: string;
+  price: number;
+  category: string;
+}
+
+export interface OrderItem extends MenuItem {
+  quantity: number;
+  notes: string;
+}
+
+export interface Table {
+  id: number;
+  number: string;
+  status: "vacant" | "occupied";
+}
+
+export interface RecentOrder {
+  id: number;
+  table: string;
+  amount: number;
+  time: string;
+  status: "Preparing" | "Served" | "Delivered";
+}
+
+export type OrderState = {
+  items: OrderItem[];
+  selectedTable: Table | null;
+  orderNotes: string;
+  kotGenerated: boolean;
+};
+
+// lib/utils.ts
+import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {

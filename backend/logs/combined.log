@@ -319,3 +319,7 @@ The table `public.User` does not exist in the current database.
 2025-05-06 17:32:13 [info]: Email sent to authtoken48@gmail.com
 2025-05-06 17:32:13 [info]: OTP sent to authtoken48@gmail.com
 2025-05-06 17:32:34 [info]: User registered: authtoken48@gmail.com
+2025-05-12 11:58:56 [info]: User logged in: shahilkumar0511@gmail.com
+2025-05-12 12:02:20 [info]: User logged in: createadress1@gmail.com
+2025-05-12 12:07:41 [info]: User logged in: shahilkumarsunny0511@gmail.com
+2025-05-12 14:44:27 [info]: User logged in: shahilkumarsunny0511@gmail.com
