@@ -1,12 +1,15 @@
-import { Sidebar } from "../components/pageComponents/sidebar/SideBar"
-
+import { Sidebar } from "../components/pageComponents/sidebar/SideBar";
+import { Outlet } from "react-router-dom";
 
 const Manager = () => {
     return (
-        <div>
+        <div className="flex">
             <Sidebar role={"manager"} />
+            <div className="flex-1 p-4">
+                <Outlet />
+            </div>
         </div>
-    )
-}
+    );
+};
 
-export default Manager
+export default Manager;

@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { OrderItem, MenuItem, Table, OrderState } from "../lib/types";
+import { MenuItem, Table, OrderState } from "../lib/types";
 
 export function useOrder() {
   const [orderState, setOrderState] = useState<OrderState>({

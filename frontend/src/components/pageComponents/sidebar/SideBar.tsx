@@ -181,6 +181,7 @@ export const Sidebar = ({ role, defaultCollapsed = false, className }: SidebarPr
         "fixed md:relative z-50 transition-all duration-300 ease-in-out",
         "h-[calc(100vh-69px)] max-w-full",
         "border-r bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60",
+        "[&::-webkit-scrollbar-thumb]:bg-orange-500 [&::-webkit-scrollbar-track]:bg-orange-100/50 dark:[&::-webkit-scrollbar-track]:bg-orange-900/20", // Scrollbar styling
         {
             "w-16": collapsed && !isMobileView,
             "w-64": (!collapsed && !isMobileView) || isMobileView,
@@ -222,51 +223,55 @@ export const Sidebar = ({ role, defaultCollapsed = false, className }: SidebarPr
                     </div>
 
                     {/* Scrollable Navigation Area */}
-                    <div className="flex-1 overflow-y-auto overflow-x-hidden">
-                        <nav className="flex flex-col gap-1 px-2 py-3">
-                            {allNavItems.map((item, index) => (
-                                <div key={index} className="w-full">
-                                    <NavLink
-                                        to={item.path}
-                                        className={({ isActive }) => cn(
-                                            "flex items-center h-10 px-3 rounded-md text-xs font-medium transition-colors",
-                                            "hover:bg-orange-500 hover:text-white dark:hover:bg-orange-700 dark:hover:text-white",
-                                            isActive
-                                                ? "bg-gradient-to-r from-primary/10 to-orange-600/10 text-primary dark:text-orange-400 border-l-2 border-primary dark:border-orange-500"
-                                                : "text-foreground/80 dark:text-gray-300",
-                                            collapsed && !isMobileView ? "justify-center" : "justify-start"
-                                        )}
-                                    >
-                                        <span className={cn(collapsed && !isMobileView ? "" : "mr-2")}>
-                                            {item.icon}
-                                        </span>
-                                        {(!collapsed || isMobileView) && (
-                                            <span className="truncate">{item.label}</span>
-                                        )}
-                                    </NavLink>
+                    <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar">
+                        <div
+                            className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-orange-500 scrollbar-track-orange-100/50 dark:scrollbar-track-orange-900/20"
+                        >
+                            <nav className="flex flex-col gap-1 px-2 py-3">
+                                {allNavItems.map((item, index) => (
+                                    <div key={index} className="w-full">
+                                        <NavLink
+                                            to={item.path}
+                                            className={({ isActive }) => cn(
+                                                "flex items-center h-10 px-3 rounded-md text-xs font-medium transition-colors",
+                                                "hover:bg-orange-500 hover:text-white dark:hover:bg-orange-700 dark:hover:text-white",
+                                                isActive
+                                                    ? "bg-gradient-to-r from-primary/10 to-orange-600/10 text-primary dark:text-orange-400 border-l-2 border-primary dark:border-orange-500"
+                                                    : "text-foreground/80 dark:text-gray-300",
+                                                collapsed && !isMobileView ? "justify-center" : "justify-start"
+                                            )}
+                                        >
+                                            <span className={cn(collapsed && !isMobileView ? "" : "mr-2")}>
+                                                {item.icon}
+                                            </span>
+                                            {(!collapsed || isMobileView) && (
+                                                <span className="truncate">{item.label}</span>
+                                            )}
+                                        </NavLink>
 
-                                    {/* Sub-items - Only shown when not collapsed or on mobile */}
-                                    {(!collapsed || isMobileView) && item.subItems && item.subItems.length > 0 && (
-                                        <div className="ml-3 pl-3 border-l border-primary/20 py-1 space-y-1">
-                                            {item.subItems.map((subItem, subIndex) => (
-                                                <NavLink
-                                                    key={subIndex}
-                                                    to={subItem.path}
-                                                    className={({ isActive }) => cn(
-                                                        "flex items-center h-8 px-2 rounded-md text-xs font-medium transition-colors",
-                                                        isActive
-                                                            ? "text-primary dark:text-orange-400 font-semibold"
-                                                            : "text-muted-foreground dark:text-gray-400 hover:text-orange-600 dark:hover:text-orange-300"
-                                                    )}
-                                                >
-                                                    <span className="truncate">{subItem.label}</span>
-                                                </NavLink>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-                        </nav>
+                                        {/* Sub-items - Only shown when not collapsed or on mobile */}
+                                        {(!collapsed || isMobileView) && item.subItems && item.subItems.length > 0 && (
+                                            <div className="ml-3 pl-3 border-l border-primary/20 py-1 space-y-1">
+                                                {item.subItems.map((subItem, subIndex) => (
+                                                    <NavLink
+                                                        key={subIndex}
+                                                        to={subItem.path}
+                                                        className={({ isActive }) => cn(
+                                                            "flex items-center h-8 px-2 rounded-md text-xs font-medium transition-colors",
+                                                            isActive
+                                                                ? "text-primary dark:text-orange-400 font-semibold"
+                                                                : "text-muted-foreground dark:text-gray-400 hover:text-orange-600 dark:hover:text-orange-300"
+                                                        )}
+                                                    >
+                                                        <span className="truncate">{subItem.label}</span>
+                                                    </NavLink>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </nav>
+                        </div>
                     </div>
 
                     {/* Bottom Section */}
