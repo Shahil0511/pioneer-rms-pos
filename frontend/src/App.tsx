@@ -13,6 +13,7 @@ import {
   setFormData
 } from "./store/slices/authSlice";
 import { toggleTheme, setTheme } from "./store/slices/themeSlice";
+import Manager from "./pages/Manager";
 
 const AppContent = () => {
   const navigate = useNavigate();
@@ -146,31 +147,32 @@ const AppContent = () => {
         {/* Protected routes */}
         <Route path="/admin/dashboard" element={
           <ProtectedRoute allowedRoles={["SUPER_ADMIN", "ADMIN"]}>
-            <Dashboard role="ADMIN" />
+            <Dashboard role="ADMIN" userName={""} />
           </ProtectedRoute>
         } />
 
         <Route path="/manager/dashboard" element={
           <ProtectedRoute allowedRoles={["MANAGER"]}>
-            <Dashboard role="MANAGER" />
+            {/* <Dashboard role="MANAGER" userName={""} /> */}
+            <Manager />
           </ProtectedRoute>
         } />
 
         <Route path="/kitchen/dashboard" element={
           <ProtectedRoute allowedRoles={["KITCHEN"]}>
-            <Dashboard role="KITCHEN" />
+            <Dashboard role="KITCHEN" userName={""} />
           </ProtectedRoute>
         } />
 
         <Route path="/delivery/dashboard" element={
           <ProtectedRoute allowedRoles={["DELIVERY"]}>
-            <Dashboard role="DELIVERY" />
+            <Dashboard role="DELIVERY" userName={""} />
           </ProtectedRoute>
         } />
 
         <Route path="/customer/dashboard" element={
           <ProtectedRoute allowedRoles={["CUSTOMER"]}>
-            <Dashboard role="CUSTOMER" />
+            <Dashboard role="CUSTOMER" userName={""} />
           </ProtectedRoute>
         } />
       </Routes>
