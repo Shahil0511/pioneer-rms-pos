@@ -43,8 +43,6 @@ export const useAuthHandler = () => {
 
                 // Determine target route
                 const targetRoute = DASHBOARD_ROUTES[userRole] ?? "/";
-
-                console.log("Navigating to:", targetRoute);
                 navigate(targetRoute);
 
                 return { targetRoute };

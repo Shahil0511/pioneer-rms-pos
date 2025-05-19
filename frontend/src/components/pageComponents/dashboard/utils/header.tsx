@@ -2,9 +2,9 @@
 
 import React from "react";
 import { Clock, User, Menu, X } from "lucide-react";
-import { useTime } from "../../../hooks/use-time";
-import { formatDate } from "../../../lib/utils";
-import { Badge } from "../../ui/badge";
+import { useTime } from "../../../../hooks/use-time";
+import { formatDate } from "../../../../lib/utils";
+import { Badge } from "../../../ui/badge";
 import { useState } from "react";
 
 interface HeaderProps {

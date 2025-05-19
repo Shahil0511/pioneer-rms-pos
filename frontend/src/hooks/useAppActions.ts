@@ -43,7 +43,6 @@ export const useAppActions = () => {
 
   const handleAuthSuccess = useCallback(
     (userData: any) => {
-      console.log("Auth success called with userData:", userData);
       authSuccessHandler({ userData });
       dispatch(toggleAuthModal(false));
     },

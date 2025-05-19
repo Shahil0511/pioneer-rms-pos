@@ -1,9 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HeroContainer from "./containers/HeroContainer";
-import { Dashboard } from "./components/pageComponents/Dashboard";
+import { Dashboard } from "./components/pageComponents/dashboard/Dashboard";
 import { ProtectedRoute } from "./components/customComponents/ProtectedRoute/ProtectedRoute";
 import Manager from "./pages/Manager";
 import AppLayout from "./components/layout/AppLayout";
+import { NewOrder } from "./components/pageComponents/orders/NewOrder";
 
 const App = () => {
   return (
@@ -19,11 +20,15 @@ const App = () => {
             </ProtectedRoute>
           } />
 
-          <Route path="/manager/dashboard" element={
+          <Route path="/manager" element={
             <ProtectedRoute allowedRoles={["MANAGER"]}>
               <Manager />
             </ProtectedRoute>
-          } />
+          }>
+            <Route path="dashboard" element={<Dashboard role="MANAGER" userName={""} />} />
+            <Route path="orders/new" element={<NewOrder role={"MANAGER"} userName={""} />} />
+          </Route>
+
 
           <Route path="/kitchen/dashboard" element={
             <ProtectedRoute allowedRoles={["KITCHEN"]}>

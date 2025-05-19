@@ -1,9 +1,9 @@
 import React from "react";
-import { Button } from "../../ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
-import { Badge } from "../../ui/badge";
-import { Table } from "../../../lib/types";
-import { cn } from "../../../lib/utils";
+import { Button } from "../../../ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../../../ui/card";
+import { Badge } from "../../../ui/badge";
+import { Table } from "../../../../lib/types";
+import { cn } from "../../../../lib/utils";
 
 interface TableSelectorProps {
     tables: Table[];

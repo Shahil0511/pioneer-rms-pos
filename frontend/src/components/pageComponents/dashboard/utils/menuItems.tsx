@@ -1,8 +1,8 @@
 import React from "react";
-import { Button } from "../../ui/button";
-import { Badge } from "../../ui/badge";
-import { MenuItem } from "../../../lib/types";
-import { formatCurrency } from "../../../lib/utils";
+import { Button } from "../../../ui/button";
+import { Badge } from "../../../ui/badge";
+import { MenuItem } from "../../../../lib/types";
+import { formatCurrency } from "../../../../lib/utils";
 
 interface MenuItemProps {
     item: MenuItem;

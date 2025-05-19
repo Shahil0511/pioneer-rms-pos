@@ -1,8 +1,8 @@
 import React from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../ui/dialog";
-import { Separator } from "../../ui/separator";
-import { OrderState } from "../../../lib/types";
-import { formatCurrency } from "../../../lib/utils";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../../../ui/dialog";
+import { Separator } from "../../../ui/separator";
+import { OrderState } from "../../../../lib/types";
+import { formatCurrency } from "../../../../lib/utils";
 
 interface KOTModalProps {
     open: boolean;

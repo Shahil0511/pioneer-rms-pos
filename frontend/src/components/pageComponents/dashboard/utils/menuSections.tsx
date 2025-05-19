@@ -1,9 +1,9 @@
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
-import { Button } from "../../ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../../../ui/card";
+import { Button } from "../../../ui/button";
 import { MenuComponent } from "./menuItems";
 
-import { MenuItem } from "../../../lib/types";
+import { MenuItem } from "../../../../lib/types";
 
 
 interface MenuSectionProps {

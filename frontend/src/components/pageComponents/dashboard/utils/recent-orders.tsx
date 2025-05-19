@@ -1,9 +1,9 @@
 import React from "react";
 import { Clock } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
-import { Badge } from "../../ui/badge";
-import { RecentOrder } from "../../../lib/types";
-import { formatCurrency } from "../../../lib/utils";
+import { Card, CardContent, CardHeader, CardTitle } from "../../../ui/card";
+import { Badge } from "../../../ui/badge";
+import { RecentOrder } from "../../../../lib/types";
+import { formatCurrency } from "../../../../lib/utils";
 
 interface RecentOrdersProps {
     orders: RecentOrder[];

@@ -1,9 +1,9 @@
 import React from "react";
 import { Minus, Plus, Trash2 } from "lucide-react";
-import { Button } from "../../ui/button";
-import { Input } from "../../ui/input";
-import { OrderItem } from "../../../lib/types";
-import { formatCurrency } from "../../../lib/utils";
+import { Button } from "../../../ui/button";
+import { Input } from "../../../ui/input";
+import { OrderItem } from "../../../../lib/types";
+import { formatCurrency } from "../../../../lib/utils";
 
 interface OrderItemProps {
     item: OrderItem;

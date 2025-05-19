@@ -51,18 +51,18 @@ export const Sidebar = ({ role, defaultCollapsed = false, className }: SidebarPr
         {
             icon: <Home className="h-4 w-4" />,
             label: "Dashboard",
-            path: "/dashboard",
+            path: "/manager/dashboard",
             roles: ['admin', 'manager', 'kitchen', 'delivery']
         },
         {
             icon: <Clock className="h-4 w-4" />,
             label: "Orders",
-            path: "/orders",
+            path: "orders",
             roles: ['admin', 'manager', 'kitchen', 'delivery', 'customer'],
             subItems: role === 'customer' ? [] : [
-                { label: "New Orders", path: "/orders/new" },
-                { label: "In Progress", path: "/orders/processing" },
-                { label: "Completed", path: "/orders/completed" }
+                { label: "New Orders", path: "/manager/orders/new" },
+                { label: "In Progress", path: "orders/processing" },
+                { label: "Completed", path: "orders/completed" }
             ]
         },
         {

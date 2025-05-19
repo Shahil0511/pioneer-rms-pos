@@ -1,13 +1,13 @@
 import React from "react";
 import { Printer } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
-import { Button } from "../../ui/button";
-import { Textarea } from "../../ui/textarea";
-import { Badge } from "../../ui/badge";
-import { Separator } from "../../ui/separator";
+import { Card, CardContent, CardHeader, CardTitle } from "../../../ui/card";
+import { Button } from "../../../ui/button";
+import { Textarea } from "../../../ui/textarea";
+import { Badge } from "../../../ui/badge";
+import { Separator } from "../../../ui/separator";
 import { OrderItemComponent } from "./order-items";
-import { OrderState } from "../../../lib/types";
-import { formatCurrency, calculateTax, calculateTotal } from "../../../lib/utils";
+import { OrderState } from "../../../../lib/types";
+import { formatCurrency, calculateTax, calculateTotal } from "../../../../lib/utils";
 
 interface OrderSummaryProps {
     orderState: OrderState;
