@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Header } from "../../../components/pageComponents/dashboard/utils/header";
 import { TableSelector } from "../../../components/pageComponents/dashboard/utils/table-selector";
-import { MenuSection } from "../dashboard/utils/menuSections";
+import { MenuSection } from "../menu/menuSections";
 import { OrderSummary } from "../../../components/pageComponents/dashboard/utils/order-summary";
 import { RecentOrders } from "../../../components/pageComponents/dashboard/utils/recent-orders";
 import { KOTModal } from "../../../components/pageComponents/dashboard/utils/kot-models";

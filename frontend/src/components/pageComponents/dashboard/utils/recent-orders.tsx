@@ -53,3 +53,4 @@ export const RecentOrders: React.FC<RecentOrdersProps> = ({ orders }) => {
         </Card>
     );
 };
+

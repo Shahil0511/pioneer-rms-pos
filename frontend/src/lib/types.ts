@@ -27,7 +27,7 @@ export interface RecentOrder {
   table: string;
   amount: number;
   time: string;
-  status: "Preparing" | "Served" | "Delivered";
+  status: "Preparing" | "Served" | "Delivered" | "Paid";
 }
 
 export type OrderState = {

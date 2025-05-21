@@ -5,6 +5,8 @@ import { ProtectedRoute } from "./components/customComponents/ProtectedRoute/Pro
 import Manager from "./pages/Manager";
 import AppLayout from "./components/layout/AppLayout";
 import { NewOrder } from "./components/pageComponents/orders/NewOrder";
+import { MenuItem } from "./components/pageComponents/menu/Menu";
+
 
 const App = () => {
   return (
@@ -27,6 +29,8 @@ const App = () => {
           }>
             <Route path="dashboard" element={<Dashboard role="MANAGER" userName={""} />} />
             <Route path="orders/new" element={<NewOrder role={"MANAGER"} userName={""} />} />
+            <Route path="menu" element={<MenuItem />} />
+            {/* <Route path="menu/categories" element={<Menu />} /> */}
           </Route>
 
 

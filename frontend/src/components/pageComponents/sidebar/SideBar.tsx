@@ -68,10 +68,10 @@ export const Sidebar = ({ role, defaultCollapsed = false, className }: SidebarPr
         {
             icon: <ShoppingBasket className="h-4 w-4" />,
             label: "Menu",
-            path: "/menu",
+            path: "/manager/menu",
             roles: ['admin', 'manager', 'customer'],
             subItems: role === 'customer' ? [] : [
-                { label: "Categories", path: "/menu/categories" },
+                { label: "Categories", path: "/manager/menu/categories" },
                 { label: "Items", path: "/menu/items" },
                 { label: "Special Offers", path: "/menu/offers" }
             ]
