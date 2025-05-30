@@ -23,6 +23,27 @@ enum UserStatus {
   SUSPENDED
 }
 
+enum FoodType {
+  VEG
+  NON_VEG
+  EGG
+}
+
+enum MenuCategory {
+  ROLLS
+  SNACKS
+  BARBEQUE_SNACKS
+  FRY_SPECIALITIES
+  MAIN_COURSE_VEG
+  INDIAN_BREADS
+  CHICKEN_CURRIES
+  MUTTON_CURRIES
+  MOMO_MANIA
+  RICE_AND_BIRYANI
+  CHINESE_WOK
+  GYM_DIET_FOOD
+}
+
 model User {
   id       String     @id @default(uuid()) @db.Uuid
   email    String?    @unique @db.VarChar(255)
@@ -57,4 +78,26 @@ model Restaurant {
   status    String   @default("ACTIVE")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  menus     Menu[]
+}
+
+
+model Menu {
+  id           String        @id @default(uuid()) @db.Uuid
+  name         String        @db.VarChar(100)
+  price        Int
+  description  String?       @db.Text
+  imageUrl     String?       @db.VarChar(500)
+  category     MenuCategory
+  type         FoodType      @default(VEG)
+  isAvailable  Boolean       @default(true)
+  restaurant   Restaurant    @relation(fields: [restaurantId], references: [id])
+  restaurantId String        @db.Uuid
+
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([category])
+  @@index([restaurantId])
+  @@index([type])
 }
